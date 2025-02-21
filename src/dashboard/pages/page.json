@@ -1,0 +1,5 @@
+{
+  "$schema": "https://dev.wix.com/wix-cli/schemas/dashboard-page.json",
+  "id": "2a3ee300-0874-4593-8676-b68211b6404c",
+  "title": "Additional Fee Manager"
+}

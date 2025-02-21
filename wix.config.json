@@ -1,0 +1,5 @@
+{
+  "$schema": "https://dev.wix.com/wix-cli/schemas/wix-config.json",
+  "appId": "589e57a7-77c3-4c8e-8be2-d3cd47848e5a",
+  "projectId": "additional-fee-manager"
+}
