@@ -1,55 +1,44 @@
-import React, { type FC } from 'react';
-import { dashboard } from '@wix/dashboard';
+import React, { useState, type FC } from "react";
+import { dashboard } from "@wix/dashboard";
 import {
+  Box,
   Button,
-  EmptyState,
-  Image,
+  Card,
+  NumberInput,
   Page,
-  TextButton,
   WixDesignSystemProvider,
-} from '@wix/design-system';
-import '@wix/design-system/styles.global.css';
-import * as Icons from '@wix/wix-ui-icons-common';
-import wixLogo from './wix_logo.svg';
+} from "@wix/design-system";
+import "@wix/design-system/styles.global.css";
 
 const Index: FC = () => {
+  const [fee, setFee] = useState(5.0);
+
+  const handleSave = () => {
+    console.log("Saving new fee:", fee);
+    dashboard.showToast({
+      message: "Fee updated successfully",
+    });
+  };
   return (
     <WixDesignSystemProvider features={{ newColorsBranding: true }}>
       <Page>
-        <Page.Header
-          title="Dashboard Page"
-          subtitle="Add management capabilities to your app."
-          actionsBar={
-            <Button
-              onClick={() => {
-                dashboard.showToast({
-                  message: 'Your first toast message!',
-                });
-              }}
-              prefixIcon={<Icons.GetStarted />}
-            >
-              Show a toast
-            </Button>
-          }
-        />
+        <Page.Header title="Packaging Fee" subtitle="Manage your packaging fee" />
         <Page.Content>
-          <EmptyState
-            image={
-              <Image fit="contain" height="100px" src={wixLogo} transparent />
-            }
-            title="Start editing this dashboard page"
-            subtitle="Learn how to work with dashboard pages and how to add functionality to them using Wix APIs."
-            theme="page"
-          >
-            <TextButton
-              as="a"
-              href="https://dev.wix.com/docs/build-apps/develop-your-app/frameworks/wix-cli/supported-extensions/dashboard-extensions/dashboard-pages/add-dashboard-page-extensions-with-the-cli#add-dashboard-page-extensions-with-the-cli"
-              target="_blank"
-              prefixIcon={<Icons.ExternalLink />}
-            >
-              Dashboard pages documentation
-            </TextButton>
-          </EmptyState>
+          <Card>
+            <Card.Header title="Select Additional Fee Amount" />
+            <Card.Content>
+              <Box direction="vertical" gap={4}>
+                <NumberInput
+                  value={fee}
+                  onChange={(value: number) => setFee(value)}
+                  name="Fee Amount"
+                  min={0}
+                  step={0.01}
+                />
+                <Button onClick={handleSave}>Save Changes</Button>
+              </Box>
+            </Card.Content>
+          </Card>
         </Page.Content>
       </Page>
     </WixDesignSystemProvider>
