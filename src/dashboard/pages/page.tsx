@@ -10,8 +10,10 @@ import {
 } from "@wix/design-system";
 import "@wix/design-system/styles.global.css";
 
+const DEFAULT_FEE = 0;
+
 const Index: FC = () => {
-  const [fee, setFee] = useState(5.0);
+  const [fee, setFee] = useState(DEFAULT_FEE);
 
   const handleSave = () => {
     console.log("Saving new fee:", fee);
