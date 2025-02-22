@@ -90,7 +90,7 @@ const Index: FC = () => {
         <Page.Header title="Packaging Fee" subtitle="Manage your packaging fee" />
         <Page.Content>
           <Card>
-            <Card.Header title="Select Additional Fee Amount" />
+            <Card.Header title="Select Packaging Fee Amount" />
             <Card.Content>
               <Box direction="vertical" gap={4}>
                 {isLoading ? (

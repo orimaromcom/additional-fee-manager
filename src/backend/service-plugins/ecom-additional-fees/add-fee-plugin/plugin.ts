@@ -1,5 +1,12 @@
 import { additionalFees } from "@wix/ecom/service-plugins";
-import { COLLECTION_ID, DEFAULT_FEE_AMOUNT, FEE_ID } from "../../../../consts/consts";
+import {
+  COLLECTION_ID,
+  CURRENCY,
+  DEFAULT_FEE_AMOUNT,
+  FEE_CODE,
+  FEE_ID,
+  FEE_NAME,
+} from "../../../../consts/consts";
 import { items } from "@wix/data";
 import { auth } from "@wix/essentials";
 
@@ -12,18 +19,18 @@ additionalFees.provideHandlers({
       return {
         additionalFees: [
           {
-            code: "packaging-fee",
-            name: "Packaging Fee",
+            code: FEE_CODE,
+            name: FEE_NAME,
             price: fee.toString(),
             taxDetails: {
               taxable: false,
             },
           },
         ],
-        currency: "ILS",
+        currency: CURRENCY,
       };
     } catch (error) {
-      console.log("error getting the fees", error);
+      console.log("error getting the fees and currency ", error);
       return { additionalFees: [] };
     }
   },
