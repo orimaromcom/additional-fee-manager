@@ -12,8 +12,8 @@
   },
   "devDependencies": {
     "@types/react": "^16.0.0",
-    "@wix/cli": "^1.1.67",
-    "@wix/cli-app": "^1.0.0",
+    "@wix/cli": "^1.1.68",
+    "@wix/cli-app": "^1.1.68",
     "react": "16.14.0",
     "react-dom": "16.14.0",
     "typescript": "^5.6.3"
@@ -27,6 +27,7 @@
     "serve": "wix app serve",
     "generate": "wix app generate",
     "logs": "wix app logs",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "release": "wix app release"
   }
 }
