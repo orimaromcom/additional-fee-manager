@@ -4,7 +4,6 @@ import {
   CURRENCY,
   DEFAULT_FEE_AMOUNT,
   FEE_CODE,
-  FEE_ID,
   FEE_NAME,
 } from "../../../../consts/consts";
 import { items } from "@wix/data";
@@ -13,10 +12,10 @@ import { auth } from "@wix/essentials";
 additionalFees.provideHandlers({
   calculateAdditionalFees: async ({ request, metadata }) => {
     try {
-      const elevatedItemsGet = auth.elevate(items.get);
-      const feeResults = await elevatedItemsGet(COLLECTION_ID, FEE_ID);
+      const elevatedItemsQuery = auth.elevate(items.query);
+      const feeResults = await elevatedItemsQuery(COLLECTION_ID).find();
 
-      const fee = feeResults ? feeResults.fee : DEFAULT_FEE_AMOUNT;
+      const fee = feeResults ? feeResults.items[0].fee : DEFAULT_FEE_AMOUNT;
       return {
         additionalFees: [
           {

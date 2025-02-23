@@ -9,37 +9,33 @@ import {
   WixDesignSystemProvider,
 } from "@wix/design-system";
 import "@wix/design-system/styles.global.css";
-import { items } from "@wix/data";
+import { items, collections } from "@wix/data";
 
-import { DEFAULT_FEE_AMOUNT, COLLECTION_ID, FEE_ID, FEE_NAME } from "../../consts/consts";
+import { COLLECTION_ID, DEFAULT_FEE_AMOUNT, FEE_ID, FEE_NAME } from "../../consts/consts";
 
 const Index: FC = () => {
   const [fee, setFee] = useState(DEFAULT_FEE_AMOUNT);
   const [isLoading, setIsLoading] = useState(true);
 
+  async function saveFee(feeAmount: number) {
+    await items.save(COLLECTION_ID, {
+      _id: FEE_ID,
+      fee: feeAmount,
+      title: FEE_NAME,
+    });
+  }
+
   const handleSave = async () => {
     try {
-      const result = await items.query(COLLECTION_ID).find();
-      if (result.items.length > 0) {
-        await items.update(COLLECTION_ID, {
-          _id: FEE_ID,
-          title: FEE_NAME,
-          fee: fee,
-        });
-      } else {
-        await items.save(COLLECTION_ID, {
-          _id: FEE_ID,
-          fee: fee,
-          title: FEE_NAME,
-        });
-      }
+      saveFee(fee);
+
       dashboard.showToast({
         message: "Fee updated successfully",
       });
     } catch (error) {
       console.error("Error saving fee:", error);
       dashboard.showToast({
-        message: "Error saving fee",
+        message: `Error saving fee ${error}`,
         type: "error",
       });
     }
@@ -48,19 +44,33 @@ const Index: FC = () => {
   useEffect(() => {
     const getFeeAmount = async () => {
       try {
-        const result = await items.query(COLLECTION_ID).find();
+        const cllectionsList = await collections.listDataCollections();
+        const isCollection = cllectionsList.collections.find((collection) => {
+          return collection._id === COLLECTION_ID;
+        });
 
-        if (result.items.length > 0) {
-          setFee(result.items[0].fee);
+        if (isCollection) {
+          const result = await items.query(COLLECTION_ID).find();
+
+          if (result.items.length > 0) {
+            setFee(result.items[0].fee);
+          } else {
+            saveFee(DEFAULT_FEE_AMOUNT);
+          }
         } else {
-          await items.save(COLLECTION_ID, {
-            _id: FEE_ID,
-            title: FEE_NAME,
-            fee: DEFAULT_FEE_AMOUNT,
+          await collections.createDataCollection({
+            _id: COLLECTION_ID,
+            fields: [{ key: "fee", displayName: "Fee", type: collections.Type.NUMBER }],
           });
+          saveFee(DEFAULT_FEE_AMOUNT);
         }
       } catch (error) {
         console.error("Getting fee amount error:", error);
+        dashboard.showToast({
+          message: `Error retrieving fee ${error}`,
+
+          type: "error",
+        });
       } finally {
         setIsLoading(false);
       }
