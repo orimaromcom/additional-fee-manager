@@ -9,16 +9,9 @@ import {
   WixDesignSystemProvider,
 } from "@wix/design-system";
 import "@wix/design-system/styles.global.css";
-import { items, collections } from "@wix/data";
+import { items } from "@wix/data";
 
-import {
-  DEFAULT_FEE_AMOUNT,
-  COLLECTION_ID,
-  COLLECTION_NAME,
-  FEE_ID,
-  FEE_NAME,
-  FEE_KEY,
-} from "../../consts/consts";
+import { DEFAULT_FEE_AMOUNT, COLLECTION_ID, FEE_ID, FEE_NAME } from "../../consts/consts";
 
 const Index: FC = () => {
   const [fee, setFee] = useState(DEFAULT_FEE_AMOUNT);
@@ -26,10 +19,20 @@ const Index: FC = () => {
 
   const handleSave = async () => {
     try {
-      await items.save(COLLECTION_ID, {
-        _id: FEE_ID,
-        fee: fee,
-      });
+      const result = await items.query(COLLECTION_ID).find();
+      if (result.items.length > 0) {
+        await items.update(COLLECTION_ID, {
+          _id: FEE_ID,
+          title: FEE_NAME,
+          fee: fee,
+        });
+      } else {
+        await items.save(COLLECTION_ID, {
+          _id: FEE_ID,
+          fee: fee,
+          title: FEE_NAME,
+        });
+      }
       dashboard.showToast({
         message: "Fee updated successfully",
       });
@@ -43,45 +46,27 @@ const Index: FC = () => {
   };
 
   useEffect(() => {
-    const setupCollection = async () => {
+    const getFeeAmount = async () => {
       try {
-        const existingCollections = await collections.listDataCollections();
-        const packagingFeeExists = existingCollections.collections.some(
-          (collection) => collection._id === COLLECTION_ID
-        );
+        const result = await items.query(COLLECTION_ID).find();
 
-        if (!packagingFeeExists) {
-          await collections.createDataCollection({
-            _id: COLLECTION_ID,
-            displayName: COLLECTION_NAME,
-            fields: [
-              {
-                displayName: FEE_NAME,
-                key: FEE_KEY,
-                type: collections.Type.NUMBER,
-              },
-            ],
-          });
-
+        if (result.items.length > 0) {
+          setFee(result.items[0].fee);
+        } else {
           await items.save(COLLECTION_ID, {
             _id: FEE_ID,
+            title: FEE_NAME,
             fee: DEFAULT_FEE_AMOUNT,
           });
         }
-
-        const result = await items.get(COLLECTION_ID, FEE_ID);
-
-        if (result) {
-          setFee(result.fee);
-        }
       } catch (error) {
-        console.error("Collection Setup error:", error);
+        console.error("Getting fee amount error:", error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    setupCollection();
+    getFeeAmount();
   }, []);
 
   return (
@@ -100,6 +85,7 @@ const Index: FC = () => {
                     value={fee}
                     onChange={(value: number) => setFee(value)}
                     name="Fee Amount"
+                    prefix="₪"
                     min={0}
                     step={0.01}
                   />

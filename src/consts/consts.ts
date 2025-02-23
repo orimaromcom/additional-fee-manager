@@ -1,5 +1,4 @@
 export const DEFAULT_FEE_AMOUNT = 11;
-
 export const COLLECTION_ID = "PackagingFee";
 export const COLLECTION_NAME = "Packaging Fee";
 export const FEE_NAME = "Packaging Fee";

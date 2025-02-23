@@ -15,6 +15,7 @@ additionalFees.provideHandlers({
     try {
       const elevatedItemsGet = auth.elevate(items.get);
       const feeResults = await elevatedItemsGet(COLLECTION_ID, FEE_ID);
+
       const fee = feeResults ? feeResults.fee : DEFAULT_FEE_AMOUNT;
       return {
         additionalFees: [
