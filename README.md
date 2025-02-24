@@ -58,6 +58,8 @@ A Wix app that enables store owners to add customizable packaging fees to all or
    - Add products to cart
    - Verify fee appears at checkout
    - Confirm amount matches dashboard settings
+  
+   Built with ❤️ using Wix Development Tools by Ori Marom
 
 
 
