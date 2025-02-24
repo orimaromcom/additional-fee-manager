@@ -8,7 +8,6 @@ A Wix app that enables store owners to add customizable packaging fees to all or
 💰 Easily customize fee amount through dashboard  
 💾 Persistent storage using Wix Data  
 🔄 Real-time fee updates  
-🛡️ Secure access with elevated permissions  
 
 ## Prerequisites
 
